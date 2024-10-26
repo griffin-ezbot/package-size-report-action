@@ -1,26 +1,28 @@
-name: 'pkg-size-action'
-description: 'Report npm package size on pull-requests'
-author: 'Hiroki Osame <hiroki.osame@gmail.com>'
+name: "pkg-size-action"
+description: "Report npm package size on pull-requests"
+author: "Hiroki Osame <hiroki.osame@gmail.com>"
 branding:
-  icon: 'git-pull-request'
-  color: 'blue'
+  icon: "git-pull-request"
+  color: "blue"
 inputs:
+  working-directory:
+    description: "Directory from which to run commands"
   build-command:
-    description: 'Command to build the package with'
+    description: "Command to build the package with"
   comment-report:
-    description: 'Whether to comment the build size report on the PR or not: true, false'
+    description: "Whether to comment the build size report on the PR or not: true, false"
   mode:
-    description: 'Report mode: regression (default), head-only'
+    description: "Report mode: regression (default), head-only"
   display-size:
-    description: 'What size to display. Comma delimited list for multiple: uncompressed (default), gzip, brotli:'
+    description: "What size to display. Comma delimited list for multiple: uncompressed (default), gzip, brotli:"
   unchanged-files:
-    description: 'Whether to show unchanged files: show, collapse, hide'
+    description: "Whether to show unchanged files: show, collapse, hide"
   sort-by:
-    description: 'Which property to sort by: delta (size difference), headSize, baseSize, path'
+    description: "Which property to sort by: delta (size difference), headSize, baseSize, path"
   sort-order:
-    description: 'Sort order: desc, asc'
+    description: "Sort order: desc, asc"
   hide-files:
-    description: 'Glob pattern to hide files with'
+    description: "Glob pattern to hide files with"
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"

@@ -7,8 +7,18 @@ import { c, link } from "./markdown.js";
 
 let pkgSizeInstalled = false;
 
-async function buildRef({ checkoutRef, refData, buildCommand }) {
-	const cwd = process.env.GITHUB_WORKSPACE;
+async function buildRef({
+	checkoutRef,
+	refData,
+	buildCommand,
+	workingDirectory,
+}) {
+	let cwd = null;
+	if (workingDirectory) {
+		cwd = `${process.env.GITHUB_WORKSPACE}/${workingDirectory}`;
+	} else {
+		cwd = process.env.GITHUB_WORKSPACE;
+	}
 
 	log.info(`Current working directory: ${cwd}`);
 

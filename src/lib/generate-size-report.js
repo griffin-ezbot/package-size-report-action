@@ -1,8 +1,11 @@
-import { setOutput } from '@actions/core';
-import { regressionReportTemplate, headOnlyReportTemplate } from '../report-templates/index.js';
-import isBaseDiffFromHead from './is-base-diff-from-head.js';
-import buildRef from './build-ref.js';
-import * as log from './log.js';
+import { setOutput } from "@actions/core";
+import {
+	regressionReportTemplate,
+	headOnlyReportTemplate,
+} from "../report-templates/index.js";
+import isBaseDiffFromHead from "./is-base-diff-from-head.js";
+import buildRef from "./build-ref.js";
+import * as log from "./log.js";
 
 async function generateSizeReport({
 	pr,
@@ -14,17 +17,19 @@ async function generateSizeReport({
 	sortBy,
 	sortOrder,
 	displaySize,
+	workingDirectory,
 }) {
-	log.startGroup('Build HEAD');
+	log.startGroup("Build HEAD");
 	const headPkgData = await buildRef({
 		refData: pr.head,
 		buildCommand,
+		workingDirectory,
 	});
-	setOutput('headPkgData', headPkgData);
+	setOutput("headPkgData", headPkgData);
 	log.endGroup();
 
-	if (mode === 'head-only') {
-		if (commentReport !== 'false') {
+	if (mode === "head-only") {
+		if (commentReport !== "false") {
 			return headOnlyReportTemplate({
 				headPkgData,
 				displaySize,
@@ -39,8 +44,8 @@ async function generateSizeReport({
 	const { ref: baseRef } = pr.base;
 	let basePkgData;
 	if (await isBaseDiffFromHead(baseRef)) {
-		log.info('HEAD is different from BASE. Triggering build.');
-		log.startGroup('Build BASE');
+		log.info("HEAD is different from BASE. Triggering build.");
+		log.startGroup("Build BASE");
 		basePkgData = await buildRef({
 			checkoutRef: baseRef,
 			refData: pr.base,
@@ -48,15 +53,15 @@ async function generateSizeReport({
 		});
 		log.endGroup();
 	} else {
-		log.info('HEAD is identical to BASE. Skipping base build.');
+		log.info("HEAD is identical to BASE. Skipping base build.");
 		basePkgData = {
 			...headPkgData,
 			ref: pr.base,
 		};
 	}
-	setOutput('basePkgData', basePkgData);
+	setOutput("basePkgData", basePkgData);
 
-	if (commentReport !== 'false') {
+	if (commentReport !== "false") {
 		return regressionReportTemplate({
 			headPkgData,
 			basePkgData,
